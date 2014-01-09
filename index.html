@@ -1,51 +1,5 @@
-<script type="text/javascript">
-	function change() 
-	{
-	    var elem = document.getElementById("clickMeButton");
-	    if (elem.value=="Click the button") 
-	    	{
-	    		elem.value = "Don't you dare click the button again.";
-	    	}
-	    else 
-	    	{
-	    		elem.value = "You had to keep clicking, didn't you?";
-			}
-	}
-</script>
-
-<script type="text/javascript">
-	function move() 
-	{
-	    var elem = document.getElementById("dontClickMeButton");
-	    elem.setAttribute('style', 'position:absolute; top:' + Math.random() * document.documentElement.clientWidth + 'px; left:' + Math.random() * document.documentElement.clientHeight + 'px;');
-	    throw new Error("dontclickme!!!")
-	}
-</script>
-
-
-
-<h1>Jake Walker (aka FractalPanda)</h1>
+<h1>Booth Hacks</h1>
 
 <p>
-^ This guy once tried to pull two consecutive all-nighters just to see if he could.  It did not go well.
+Currently under development
 </p>
-
-<table>
-	<tr>
-		Click the button if you dare....
-	</tr>
-	<tr>
-		<input onclick="change()" type="button" value="Click the button" id="clickMeButton"></input>
-	</tr>
-</table>
-
-<table>
-	<tr>
-		ok, THIS button you definitely shouldn't click:
-	</tr>
-</table>
-		<input onMouseOver="move()" type="button" value="Does not want to be clicked" id="dontClickMeButton"></input>
-<p>
-	BASK IN MY IMAGE GLORY:
-</p>
-<img src="http://blogs.msdn.com/blogfiles/mthree/WindowsLiveWriter/a7647df99e0a_7E2B/fractalpanda_2.jpg"></img>
