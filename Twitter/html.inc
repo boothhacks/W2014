@@ -14,7 +14,7 @@
     <p>
       <pre>
         <?php print_r($followers) ?>
-        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo 'follower '.$y.': '.$followers[$keys[$y]]} ?>
+        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo 'follower '.$y.': '.$followers[$keys[$y]]; } ?>
       </pre>
     </p>
 
