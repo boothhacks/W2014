@@ -19,7 +19,7 @@
      </table>
     </p>    
       <pre>
-        <?php echo $maxfollow; } ?>
+        <?php $maxfollow ?>
       </pre>
 
   </body>
