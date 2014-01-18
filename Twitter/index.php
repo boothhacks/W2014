@@ -38,6 +38,9 @@ for($x = 0; $x < count($Members->users); $x++)
 	if($Members->users[$x]->followers_count > $maxfollow)
 		$maxfollow = $Members->users[$x]->followers_count;
 }
+
+arsort($followers);
+
 //
 
 /* Include HTML to display on the page */

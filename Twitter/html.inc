@@ -15,7 +15,7 @@
     <div style="position:absolute;left:50px">
      <table>
       <pre>
-        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<tr><td><div style="overflow:hidden;white-space:nowrap;background-color:#40B3DF;opacity:0.7;width:'.(round(intval($followers[$keys[$y]]) * 800 / $maxfollow)).'px">'.$keys[$y].' - '.$followers[$keys[$y]].'</td></tr></div>'; } ?>
+        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<tr><td><div style="white-space:nowrap;background-color:#40B3DF;opacity:0.7;width:'.(round(intval($followers[$keys[$y]]) * 800 / $maxfollow)).'px">'.$keys[$y].' - '.$followers[$keys[$y]].'</td></tr></div>'; } ?>
       </pre>
      </table>
    </div>
