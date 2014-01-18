@@ -23,7 +23,7 @@
     <?php } ?>
     <p>
       <pre>
-        <?php echo 'ids zero: '.$content->ids[0]; ?>
+        <?php echo 'DH ID: '.$DH->id; ?>
       </pre>
       <pre>
         <?php print_r($content); ?>

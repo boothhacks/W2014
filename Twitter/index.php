@@ -22,6 +22,20 @@ $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oau
 /* If method is set change API call made. Test is called by default. */
 //$content = $connection->get('account/verify_credentials');
 $content = $connection->get('followers/ids', array('screen_name' => 'YaoYaoHacks'));
+$DH = $connection->get('users/lookup', array('screen_name' => 'DoerHub');
+
+/*1431716216
+'lists/list'
+103277668
+'lists/members'
+'followers/ids'
+users[$x]->id;
+for($x; $x <= count($content->ids); $x++)
+{
+
+}
+$content->ids[0];
+*/
 
 /* Some example calls */
 //$connection->get('users/show', array('screen_name' => 'nocontxtquotes')));
