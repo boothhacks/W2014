@@ -36,7 +36,7 @@ $followers = array();
 for($x = 0; $x <= count($Members); $x++)
 {
 	//array_push($followers, $Members[0]->name => count($connection->get('followers/ids', array('screen_name' => $Members[0]->name)));
-    array_push($followers, $Members[$x]->name));
+    $followers = $Members[$x];
 }
 
 /*1431716216
