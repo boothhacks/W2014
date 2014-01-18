@@ -20,9 +20,5 @@
      </table>
    </div>
     </p>    
-      <pre>
-        <?php echo $maxfollow ?>
-      </pre>
-
   </body>
 </html>
