@@ -11,7 +11,6 @@
   </head>
   <body>
     <h2>Booth Hacks Twitter Competition</h2>
-    <p>
     <div style="position:absolute;left:50px">
      <table>
       <pre>
@@ -19,6 +18,10 @@
       </pre>
      </table>
    </div>
-    </p>    
+      <p>
+        <pre>
+        <?php if(isset($content)){echo $content} ?>
+        </pre>
+      </p>
   </body>
 </html>
