@@ -23,6 +23,9 @@
     <?php } ?>
     <p>
       <pre>
+        <?php echo 'ids zero: '.$content->ids[0]; ?>
+      </pre>
+      <pre>
         <?php print_r($content); ?>
       </pre>
     </p>
