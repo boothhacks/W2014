@@ -29,6 +29,7 @@
         <?php echo 'BHID: '.$BHID; ?>
         <?php print_r($Members->users) ?>
         <?php print_r($followers) ?>
+        <?php echo 'followers: '.$followers; ?>
       </pre>
       <pre>
         <?php print_r($content); ?>
