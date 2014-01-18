@@ -10,24 +10,11 @@
     </style>
   </head>
   <body>
-    <div>
-      <h2>Booth Hacks Twitter Competition</h2>
-
-      <hr />
-      <?php if (isset($menu)) { ?>
-        <?php echo $menu; ?>
-      <?php } ?>
-    </div>
-    <?php if (isset($status_text)) { ?>
-      <?php echo '<h3>'.$status_text.'</h3>'; ?>
-    <?php } ?>
+    <h2>Booth Hacks Twitter Competition</h2>
     <p>
       <pre>
         <?php print_r($followers) ?>
-        <?php echo 'followers: '.$followers; ?>
-      </pre>
-      <pre>
-        <?php print_r($content); ?>
+        <?php for($y = 0; $y < count($followers); $y++) {echo 'follower '.$y.': '.$followers[$y]} ?>
       </pre>
     </p>
 
