@@ -24,7 +24,7 @@ $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oau
 //$content = $connection->get('followers/ids', array('screen_name' => 'YaoYaoHacks'));
 $BHList =  $connection->get('lists/list', array('screen_name' => 'DoerHub'));
 $BHID = 0;
-for($x = 0; $x <= count($BHList); $x++)
+for($x = 0; $x < count($BHList); $x++)
 {
 	if($BHList[$x]->name == "BH")
 		$BHID = $BHList[$x]->id_str;
@@ -32,10 +32,9 @@ for($x = 0; $x <= count($BHList); $x++)
 $Members =  $connection->get('lists/members', array('list_id' => $BHID));
 
 $followers = array();
-for($x = 0; $x <= count($Members->users); $x++)
+for($x = 0; $x < count($Members->users); $x++)
 {
-	array_push($followers, $Members->users[$x]->screen_name);
-                          // $Members->users[$x]->followers_count)
+	$followers[$Members->users[$x]->screen_name] = $Members->users[$x]->followers_count;
 }
 //
 
