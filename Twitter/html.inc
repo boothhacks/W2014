@@ -23,11 +23,6 @@
     <?php } ?>
     <p>
       <pre>
-        <?php echo 'DH ID: '.$DH[0]->id_str; ?>
-        <?php echo 'BHList: '.count($BHList); ?>
-        <?php echo 'BHList: '.$BHList[0]->id_str; ?>
-        <?php echo 'BHID: '.$BHID; ?>
-        <?php print_r($Members->users) ?>
         <?php print_r($followers) ?>
         <?php echo 'followers: '.$followers; ?>
       </pre>
