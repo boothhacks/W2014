@@ -23,8 +23,10 @@
     <?php } ?>
     <p>
       <pre>
-        <?php echo 'DH: '.$DH; ?>
+        <?php echo 'DH ID: '.$DH->id; ?>
         <?php echo 'BHList: '.$BHList; ?>
+        <?php echo 'BHID: '.$BHID; ?>
+        <?php echo 'Members: '.$Members; ?>
       </pre>
       <pre>
         <?php print_r($content); ?>

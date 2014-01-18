@@ -21,9 +21,17 @@ $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oau
 
 /* If method is set change API call made. Test is called by default. */
 //$content = $connection->get('account/verify_credentials');
-$content = $connection->get('followers/ids', array('screen_name' => 'YaoYaoHacks'));
+//$content = $connection->get('followers/ids', array('screen_name' => 'YaoYaoHacks'));
 $DH =      $connection->get('users/lookup', array('screen_name' => 'DoerHub'));
 $BHList =  $connection->get('lists/list', array('screen_name' => 'DoerHub', 'user_id' => ($DH->id_str)));
+$BHID = 0;
+for($x; $x <= count($BHList); $x++)
+{
+	if($BHList[$x]->name == "BH")
+		$BHID = $BHList[$x]->id_str;
+}
+$Members =  $connection->get('lists/list', array('list_id' => $BHID));
+
 /*1431716216
 'lists/list'
 103277668
