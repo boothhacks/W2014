@@ -34,8 +34,9 @@ $Members =  $connection->get('lists/members', array('list_id' => $BHID));
 $followers = array();
 for($x = 0; $x <= count($Members->users); $x++)
 {
-	array_push($followers,  $Members->users[$x]->screen_name => $Members->users[$x]->followers_count);
+	array_push($followers, $Members->users[$x]->followers_count);
 }
+//$Members->users[$x]->screen_name => 
 //$Members->users[$x]->screen_name =>
 //$Members->users[$x]->name =>
 //$Members->users[$x]->name => 
