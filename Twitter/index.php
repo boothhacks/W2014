@@ -20,7 +20,8 @@ $access_token = $_SESSION['access_token'];
 $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
 
 /* If method is set change API call made. Test is called by default. */
-$content = $connection->get('account/verify_credentials');
+//$content = $connection->get('account/verify_credentials');
+$content = $connection->get('followers/ids', array('screen_name' => 'YaoYaoHacks'));
 
 /* Some example calls */
 //$connection->get('users/show', array('screen_name' => 'nocontxtquotes')));
