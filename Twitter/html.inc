@@ -27,7 +27,7 @@
         <?php echo 'BHList: '.count($BHList); ?>
         <?php echo 'BHList: '.$BHList[0]->id_str; ?>
         <?php echo 'BHID: '.$BHID; ?>
-        <?php echo 'Members: '.$Members; ?>
+        <?php print_r($followers) ?>
       </pre>
       <pre>
         <?php print_r($content); ?>
