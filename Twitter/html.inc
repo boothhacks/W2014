@@ -24,6 +24,7 @@
     <p>
       <pre>
         <?php echo 'DH: '.$DH; ?>
+        <?php echo 'BHList: '.$BHList; ?>
       </pre>
       <pre>
         <?php print_r($content); ?>
