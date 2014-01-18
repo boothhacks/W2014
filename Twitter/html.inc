@@ -24,7 +24,7 @@
     <p>
       <pre>
         <?php echo 'DH ID: '.$DH[0]->id_str; ?>
-        <?php echo 'BHList: '.$BHList[0]; ?>
+        <?php echo 'BHList: '.$BHList; ?>
         <?php echo 'BHID: '.$BHID; ?>
         <?php echo 'Members: '.$Members; ?>
       </pre>
