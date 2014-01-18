@@ -31,12 +31,12 @@ for($x = 0; $x <= count($BHList); $x++)
 }
 $Members =  $connection->get('lists/members', array('list_id' => $BHID));
 
-$followers = array();
+
 for($x = 0; $x <= count($Members->users); $x++)
 {
-	$followers[$Members->users[$x]->screen_name] = $Members->users[$x]->followers_count);
+	array_push($followers, $Members->users[$x]->screen_name);
 }
-
+// = $Members->users[$x]->followers_count);
 
 /* Include HTML to display on the page */
 include('html.inc');
