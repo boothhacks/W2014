@@ -30,7 +30,7 @@ for($x = 0; $x <= count($BHList); $x++)
 	if($BHList[$x]->name == "BH")
 		$BHID = $BHList[$x]->id_str;
 }
-$Members =  $connection->get('lists/list', array('list_id' => $BHID));
+$Members =  $connection->get('lists/members', array('list_id' => $BHID));
 
 $followers = array();
 for($x = 0; $x <= count($Members); $x++)
