@@ -25,7 +25,6 @@
       <pre>
         <?php echo 'DH ID: '.$DH[0]->id_str; ?>
         <?php echo 'BHList: '.count($BHList); ?>
-        <?php print_r($BHList); ?>
         <?php echo 'BHList: '.$BHList[0]->id_str; ?>
         <?php echo 'BHID: '.$BHID; ?>
         <?php echo 'Members: '.$Members; ?>
