@@ -23,7 +23,7 @@
     <?php } ?>
     <p>
       <pre>
-        <?php echo 'DH ID: '.$DH->id_str; ?>
+        <?php echo 'DH ID: '.$DH[0]->id_str; ?>
         <?php echo 'BHList: '.$BHList[0]; ?>
         <?php echo 'BHID: '.$BHID; ?>
         <?php echo 'Members: '.$Members; ?>

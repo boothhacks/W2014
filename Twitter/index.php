@@ -23,7 +23,7 @@ $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oau
 //$content = $connection->get('account/verify_credentials');
 //$content = $connection->get('followers/ids', array('screen_name' => 'YaoYaoHacks'));
 $DH =      $connection->get('users/lookup', array('screen_name' => 'DoerHub'));
-$BHList =  $connection->get('lists/list', array('screen_name' => 'DoerHub', 'user_id' => ($DH->id_str)));
+$BHList =  $connection->get('lists/list', array('screen_name' => 'DoerHub', 'user_id' => ($DH[0]->id_str)));
 $BHID = 0;
 for($x; $x <= count($BHList); $x++)
 {
