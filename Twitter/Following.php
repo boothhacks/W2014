@@ -39,6 +39,7 @@ for($x = 0; $x < count($Members->users); $x++)
 	$followers[$Members->users[$x]->screen_name] = $Members->users[$x]->followers_count;
 	if($Members->users[$x]->followers_count > $maxfollow)
 		$maxfollow = $Members->users[$x]->followers_count;
+	
 	$following_temp[$Members->users[$x]->screen_name] = $Members->users[$x]->friends_count;
 }
 

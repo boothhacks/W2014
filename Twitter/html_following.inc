@@ -10,11 +10,11 @@
     </style>
   </head>
   <body>
-    <h2>Booth Hacks Twitter Competition</h2>
+    <h2>Booth Hacks Twitter Competition - Following</h2>
     <div style="position:absolute;left:50px">
      <table>
       <pre>
-        <?php if(isset($followers) && isset($maxfollow)){$keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<tr><td><div style="white-space:nowrap;background-color:#40B3DF;opacity:0.7;width:'.(round(intval($followers[$keys[$y]]) * 800 / $maxfollow)).'px">'.$keys[$y].' - '.$followers[$keys[$y]].'</td></tr></div>'; }} ?>
+        <?php if(isset($followers) && isset($maxfollow)){$keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<tr><td><div style="white-space:nowrap;background-color:#40B3DF;opacity:0.7;width:'.(round(intval($followers[$keys[$y]]) * 800 / $maxfollow)).'px">'.$keys[$y].' - '.$followers[$keys[$y]].'</div></td></tr>'; echo '<tr><td><div style="background-color:#D2691E;opacity:0.7;width:'.(round(intval($following[$keys[$y]]) * 800 / $maxfollow)).'px">'.$keys[$y].' - '.$following[$keys[$y]].'</div></td></tr>'; }} ?>
       </pre>
      </table>
    </div>
