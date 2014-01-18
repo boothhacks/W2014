@@ -34,31 +34,9 @@ $Members =  $connection->get('lists/members', array('list_id' => $BHID));
 $followers = array();
 for($x = 0; $x <= count($Members->users); $x++)
 {
-	array_push($followers, $Members->users[$x]->followers_count);
+	$followers[$Members->users[$x]->screen_name] = $Members->users[$x]->followers_count);
 }
-//$Members->users[$x]->screen_name => 
-//$Members->users[$x]->screen_name =>
-//$Members->users[$x]->name =>
-//$Members->users[$x]->name => 
-/*1431716216
-'lists/list'
-103277668
-'lists/members'
-'followers/ids'
-users[$x]->id;
-for($x; $x <= count($content->ids); $x++)
-{
 
-}
-$content->ids[0];
-*/
-
-/* Some example calls */
-//$connection->get('users/show', array('screen_name' => 'nocontxtquotes')));
-//$connection->post('statuses/update', array('status' => date(DATE_RFC822)));
-//$connection->post('statuses/destroy', array('id' => 5437877770));
-//$connection->post('friendships/create', array('id' => 9436992)));
-//$connection->post('friendships/destroy', array('id' => 9436992)));
 
 /* Include HTML to display on the page */
 include('html.inc');
