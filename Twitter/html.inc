@@ -20,7 +20,7 @@
    </div>
       <p>
         <pre>
-        <?php if(isset($content)){echo $content} ?>
+        <?php if(isset($content)){echo $content;} ?>
         </pre>
       </p>
   </body>
