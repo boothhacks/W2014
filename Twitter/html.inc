@@ -12,10 +12,11 @@
   <body>
     <h2>Booth Hacks Twitter Competition</h2>
     <p>
+     <table>
       <pre>
-        <?php print_r($followers) ?>
-        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo 'follower '.$y.': '.$followers[$keys[$y]]; } ?>
+        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<div style=\"color:blue;opacity:0.7;width:'.(intval($followers[$keys[$y]]) * 800 / $maxfollow).'px\">'.$followers[$keys[$y]].'</div>'; } ?>
       </pre>
+     </table>
     </p>
 
   </body>

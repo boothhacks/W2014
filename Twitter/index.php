@@ -30,11 +30,13 @@ for($x = 0; $x < count($BHList); $x++)
 		$BHID = $BHList[$x]->id_str;
 }
 $Members =  $connection->get('lists/members', array('list_id' => $BHID));
-
+$maxfollow = 0;
 $followers = array();
 for($x = 0; $x < count($Members->users); $x++)
 {
 	$followers[$Members->users[$x]->screen_name] = $Members->users[$x]->followers_count;
+	if($Members->users[$x]->followers_count > $maxfollow)
+		$maxfollow = $Members->users[$x]->followers_count;
 }
 //
 
