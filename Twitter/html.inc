@@ -14,10 +14,13 @@
     <p>
      <table>
       <pre>
-        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<div style=\"color:blue;opacity:0.7;width:'.(intval($followers[$keys[$y]]) * 800 / $maxfollow).'px\">'.$followers[$keys[$y]].'</div>'; } ?>
+        <?php $keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<div style="color:blue;opacity:0.7;width:'.(round(intval($followers[$keys[$y]]) * 800 / $maxfollow)).'px">'.$followers[$keys[$y]].'</div>'; } ?>
       </pre>
      </table>
-    </p>
+    </p>    
+      <pre>
+        <?php echo $maxfollow; } ?>
+      </pre>
 
   </body>
 </html>
