@@ -14,14 +14,14 @@
     <div style="position:absolute;left:50px">
      <table>
       <pre>
-        <?php if(isset($followers) && isset($maxfollow)){$keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<tr><td><div style="white-space:nowrap;background-color:#40B3DF;opacity:0.7;width:'.(round(intval($followers[$keys[$y]]) * 800 / $maxfollow)).'px">'.$keys[$y].' - '.$followers[$keys[$y]].'</div></td></tr>'; }} ?>
+        <?php if(isset($followers) && isset($maxfollow)){$keys = array_keys($followers); for($y = 0; $y < count($followers); $y++) {echo '<tr><td><div style="white-space:nowrap;background-color:#40B3DF;opacity:0.7;width:'.(round(intval($followers[$keys[$y]]) * 800 / $maxfollow)).'px">'.$keys[$y].' - '.$followers[$keys[$y]].'</td></tr></div>'; }} ?>
       </pre>
      </table>
    </div>
       <p>
         <pre>
-        <?php if(isset($content)){echo $content} ?>
-      </pre>
-</p/
+        <?php if(isset($content)){echo $content;} ?>
+        </pre>
+      </p>
   </body>
 </html>
