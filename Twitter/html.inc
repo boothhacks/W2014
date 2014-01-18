@@ -23,7 +23,7 @@
     <?php } ?>
     <p>
       <pre>
-        <?php echo 'DH ID: '.$DH->id; ?>
+        <?php echo 'DH: '.$DH; ?>
       </pre>
       <pre>
         <?php print_r($content); ?>
