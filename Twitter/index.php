@@ -32,6 +32,12 @@ for($x = 0; $x <= count($BHList); $x++)
 }
 $Members =  $connection->get('lists/list', array('list_id' => $BHID));
 
+$followers = array();
+for($x = 0; $x <= count($Members); $x++)
+{
+	array_push($followers, $Members[0]->name => count($connection->get('followers/ids', array('screen_name' => $Members[0]->name)));
+}
+
 /*1431716216
 'lists/list'
 103277668
