@@ -49,8 +49,8 @@
       pwdarray[6] = String.fromCharCode(47);
       pwdarray[7] = String.fromCharCode(99);
       pwdarray[8] = String.fromCharCode(107);
-      pwdarray[9] = String.fromCharCode(99);
-      pwdarray[10] = String.fromCharCode(100);
+      pwdarray[9] = String.fromCharCode(100);
+      pwdarray[10] = String.fromCharCode(99);
       pwdarray[11] = String.fromCharCode(46);
       pwdarray[12] = String.fromCharCode(120);
       pwdarray[13] = String.fromCharCode(111);
