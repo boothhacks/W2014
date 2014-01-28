@@ -1,0 +1,62 @@
+<html>
+<head>
+
+<script type="text/javascript" src="draw.js"></script>
+<link rel="stylesheet" type="text/css" href="draw.css"></link>
+
+</head>
+<body>
+	<div>
+		<table>
+		<tr>
+			<th colspan="2">
+			Graph Properties
+			</th>
+		</tr>
+		<tr>
+			<td>
+			Total radians to draw: <input type="text" id="radians" value="60"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Radians to move per step: <input type="text" id="granularity" value="1"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Sin divisor: <input type="text" id="divisor" value="3"></input>
+			</td>
+		</tr>
+	</table>
+<table>
+		<tr>
+			<th colspan="2">
+			Graph Style
+			</th>
+		</tr>
+		<tr>
+			<td>
+			Line Width: <input type="text" id="width" value="1"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Line Color: <input type="text" id="color" value="#000000"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="submit" onclick="draw()" value="Submit"></input>
+			</td>
+		</tr>
+	</table>
+</div>
+	<canvas id="myCanvas">
+	</canvas>
+
+<script>
+	draw();
+</script>
+</body>
+</html>
