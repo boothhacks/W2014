@@ -89,10 +89,10 @@ function drawWord(ctx, text, font, x, y, gradWidth, gradHeight, color1, color2)
 	ctx.stroke();
 	
 
-	ctx.lineWidth = 2;
+	ctx.lineWidth = 1.5;
 	ctx.strokeStyle= grd;
 	ctx.beginPath();
-	ctx.arc(x,y, 15, 1.58 * Math.PI, 1.95 * Math.PI);
+	ctx.arc(x,y, 14, 0, 2 * Math.PI /*1.58 * Math.PI, 1.95 * Math.PI*/);
 	ctx.stroke();
 
 	ctx.strokeStyle=grd;
