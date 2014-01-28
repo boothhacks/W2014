@@ -1,0 +1,101 @@
+<html>
+<head>
+
+<script type="text/javascript" src="draw.js"></script>
+<link rel="stylesheet" type="text/css" href="draw.css"></link>
+
+</head>
+<body>
+	<div>
+		<table>
+		<tr>
+			<th colspan="2">
+			Graph Properties
+			</th>
+		</tr>
+		<tr>
+			<td>
+			Text 1 to draw: <input type="text" id="text1" value="Booth"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 2 to draw: <input type="text" id="text2" value="Hacks"></input>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<th colspan="2">
+			Text 1 Style
+			</th>
+		</tr>
+		<tr>
+			<td>
+			Text 1 Font: <input type="text" id="text1font" value="60px Arial Bold Italic"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 1 Color 1: <input type="text" id="text1color1" value="#000000"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 1 Color 2: <input type="text" id="text1color2" value="#EE0000"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 1 x: <input type="text" id="text1x" value="200"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 1 y: <input type="text" id="text1y" value="200"></input>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<th colspan="2">
+			Text 2 Style
+			</th>
+		</tr>
+		<tr>
+			<td>
+			Text 2 Font: <input type="text" id="text2font" value="60px Arial Bold Italic"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 2 Color 1: <input type="text" id="text2color1" value="#EE0000"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 2 Color 2: <input type="text" id="text2color2" value="#000000"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 2 x: <input type="text" id="text2x" value="300"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			Text 2 y: <input type="text" id="text2y" value="250"></input>
+			</td>
+		</tr>
+	</table>
+	<br>
+	<input type="submit" onclick="drawtext()" value="Submit"></input>
+	</div>
+	<canvas id="myCanvas">
+	</canvas>
+
+<script>
+	drawtext();
+</script>
+</body>
+</html>

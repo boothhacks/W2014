@@ -4,3 +4,7 @@ table
 	border-style: solid;
 	display: inline-block;
 }
+#submit
+{
+	display: block;
+}
