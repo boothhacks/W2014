@@ -1,0 +1,110 @@
+<html>
+<head>
+
+<script type="text/javascript">
+function drawShape(ctx, radians, granularity, divisor, scalar, xoffset, yoffset)
+{
+
+	var pointsx = new Array();
+	var pointsy = new Array();
+
+    for(var theta = 0; theta < radians; theta += granularity)
+	{
+		//r is the radius in polar coordinates
+		var r = 100 * Math.sin(scalar/divisor*theta);
+
+		//convert to cartesian coordinates, add an offset so we can show multiple graphs on one screen
+		var x = xoffset + r * Math.cos(theta);
+		var y = yoffset + r * Math.sin(theta);
+
+		//push the values onto the back of the arrays
+		pointsx.push(x);
+		pointsy.push(y);
+	}
+	/*
+	for(var k = 1; k < pointsx.length; k++)
+	{
+		//if you wanted to draw a background, you could do it here
+	}
+	*/
+
+	for(var k = 1; k < pointsx.length; k++)
+	{
+		ctx.beginPath();
+		ctx.moveTo(pointsx[k-1],pointsy[k-1]);
+		ctx.lineTo(pointsx[k],pointsy[k]);
+		ctx.stroke();			
+	}
+	return true;
+	//Save your file to a .png file- http://stackoverflow.com/questions/923885/capture-html-canvas-as-gif-jpg-png-pdf
+}
+function drawWord(ctx, text, font, x, y, gradWidth, gradHeight, color1, color2)
+{
+	//see http://www.w3schools.com/tags/canvas_createlineargradient.asp
+	var grd=ctx.createLinearGradient(x, 0, x + gradWidth, gradHeight);
+	
+	//see http://www.w3schools.com/tags/canvas_addcolorstop.asp
+	grd.addColorStop(0,color1);
+	grd.addColorStop(1,color2);
+	
+	
+	ctx.fillStyle=grd;
+	ctx.font = font;
+	ctx.fillText(text, x, y);
+	ctx.strokeText(text, x, y);
+}
+
+</script>
+<link rel="stylesheet" type="text/css" href="draw.css"></link>
+
+</head>
+<body>
+
+	<canvas id="myCanvas">
+	</canvas>
+
+<script>
+	var canvas = document.getElementById("myCanvas");
+	canvas.setAttribute("width", 700);
+	canvas.setAttribute("height", 500);
+	var ctx = canvas.getContext("2d");
+	var color = "#111166";
+	var x = 200;
+	var y = 200;
+	var grd=ctx.createLinearGradient(x - 100, 0, x + 100, 0);
+	
+	//see http://www.w3schools.com/tags/canvas_addcolorstop.asp
+	grd.addColorStop(0,"black");
+	grd.addColorStop(1,color);
+	ctx.strokeStyle=grd;
+
+	ctx.lineWidth = 1;
+	drawShape(ctx, 60, 1, 5.1, 8, x, y);
+	
+
+	ctx.lineWidth = 90;
+	ctx.strokeStyle= "#FFFFFF";
+	ctx.beginPath();
+	ctx.arc(x,y, 100/2 + 10, 1.58 * Math.PI, 1.95 * Math.PI);
+	ctx.stroke();
+	
+
+	ctx.lineWidth = 2;
+	ctx.strokeStyle= grd;
+	ctx.beginPath();
+	ctx.arc(x,y, 15, 1.58 * Math.PI, 1.95 * Math.PI);
+	ctx.stroke();
+
+	ctx.strokeStyle=grd;
+	ctx.lineWidth = 25;
+	drawWord(ctx, "Booth", "80px Arial Bold Italic", x + 15, y - 35, 200, 0, "#000000", color);
+	drawWord(ctx, "Hacks", "80px Arial Bold Italic", x + 125, y + 40, 200, 0, color, "#000000");
+
+	ctx.lineWidth = 1;
+	drawWord(ctx, "Booth", "80px Arial Bold Italic", x + 15, y - 35, 200, 0, "#FFFFFF", "#FFFFFF");
+	drawWord(ctx, "Hacks", "80px Arial Bold Italic", x + 125, y + 40, 200, 0, "#FFFFFF", "#FFFFFF");
+
+
+</script>
+</body>
+</html>
