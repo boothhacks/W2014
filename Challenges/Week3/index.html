@@ -1,0 +1,92 @@
+ <html>
+<head></head>
+<body>
+<style>
+table
+{
+border-collapse:collapse;
+}
+table, th, td
+{
+border: 1px solid black;
+padding: 5px;
+}
+</style>
+
+<h1>Week 3 Challenge</h1>
+<p>For this challenge, you'll need to do a git pull to get the latest files from our github repo.</p>
+
+<p>Once you do, you'll need to search through the boothhacks/W2014/Searchme directory and count the <b>total number of lines</b> that contain the word <b>"Job"</b> in <b>files</b> that contain the word <b>"apply"</b> in their name.</p>
+
+<p>For example, the following files would each count:</p>
+<table>
+	<tr>
+		<th>file name</th>
+		<th>file contents</th>
+		<th>notes</th>
+	</tr>
+	<tr>
+		<td>Searchme/apply.txt</td>
+		<td>Job</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Searchme/123apply456.txt</td>
+		<td>abcJobdef</td>
+		<td>It still counts if there's additional text in the file name or file contents</td>
+	</tr>
+	<tr>
+		<td>Searchme/Folderxyz/apply.txt</td>
+		<td>Job</td>
+		<td>Any file counts, no matter how deep its burried underneath directories</td>
+	</tr>
+	<tr>
+		<td>Searchme/apply.txt</td>
+		<td>abcJobdefJobhij</td>
+		<td>Even if "Job" appears twice, it only counts as 1 line</td>
+	</tr>
+	<tr>
+		<td>Searchme/apply.txt</td>
+		<td>abcJobdef<br>Jobhij</td>
+		<td>However, if "Job" appears on 2 seperate lines, <b>then that counts as 2</b></td>
+	</tr>
+</table>
+
+<p>While these files would NOT match:</p>
+<table>
+	<tr>
+		<th>file name</th>
+		<th>file contents</th>
+		<th>notes</th>
+	</tr>
+	<tr>
+		<td>somename.txt</td>
+		<td>Job</td>
+		<td>file name doesn't match the string "apply"</td>
+	</tr>
+	<tr>
+		<td>apply.txt</td>
+		<td>blahblah</td>
+		<td>file contents doesn't match string "Job"</td>
+	</tr>
+	<tr>
+		<td>apply.txt</td>
+		<td>job</td>
+		<td>lowercase "job" doesn't count!</td>
+	</tr>
+</table>
+
+<p>
+	Go to <a href="https://docs.google.com/spreadsheet/ccc?key=0AskvroI9HuxydEFyVFQ2STJZUUFLZEJGcE92Y0ZmcVE&usp=sharing">this Google Doc</a> to fill out your name and your guess.  Whoever is the first person to get it right will get the (small) prize (to break ties, we'll look through the google doc revision history to see who put it first).
+</p>
+<h1>
+	Good Luck!
+</h1>
+<p>
+	Hint: we didn't talk about exactly how to do this last week.  We talked about grep and find, but we didn't talk about how to count the number of lines, and we didn't talk about how to grep the contents of files outputted by find (it's not as simple as piping the output!)  
+</p>
+<p>
+	Google is your friend here.  I was able to find the solution in one of the first 3 links of my google search.
+</p>
+</body>
+</html>
