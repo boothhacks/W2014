@@ -127,7 +127,21 @@ function GridFromCoordy(y)
 {
 	return Math.round(y / window.gridBlockHeight - 0.5);
 }
+function collision(x, y, startIndex)
+{
+	startIndex = typeof startIndex !== 'undefined' ? startIndex : 0;
 
+	//returns true if the grid coordinate x,y is occupied by part of the existing snake
+	for(var i = startIndex; i < window.snakeBody.length; i++)
+	{
+		if(GridFromCoordx(parseInt(window.snakeBody[i].style.left, 10)) == x &&
+			GridFromCoordy(parseInt(window.snakeBody[i].style.top, 10)) == y)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 function createSnakeBlock(x, y)
 {
 	var block = document.createElement("div");
@@ -144,6 +158,62 @@ function createSnakeBlock(x, y)
     window.board.appendChild(block);
 
 	return block;
+}
+
+function checkDeath()
+{
+	if(window.snakeHeadPosx < 0 || window.snakeHeadPosx  >= window.boardWidth / window.gridBlockWidth ||
+		window.snakeHeadPosy < 0 || window.snakeHeadPosy  >= window.boardHeight / window.gridBlockHeight)
+	{
+		window.isAlive = false;
+	}
+	if(collision(window.snakeHeadPosx, window.snakeHeadPosy, 1))
+	{
+		window.isAlive = false;
+	}
+}
+
+function checkAteFood()
+{
+	if(collision(window.foodGridPosx, window.foodGridPosy))
+	{
+		deleteOldFood();
+		placeRandomFood();
+		growSnake();
+	}
+}
+
+function Move()
+{
+	var elm = window.snakeBody.pop();
+	window.snakeHeadPosx += window.xmove[window.snakeDir];
+	window.snakeHeadPosy += window.ymove[window.snakeDir];
+	elm.style.left = CoordFromGridx(window.snakeHeadPosx);
+	elm.style.top = CoordFromGridy(window.snakeHeadPosy);
+	window.snakeBody.unshift(elm);
+
+	checkAteFood();
+
+	checkDeath();
+}
+
+
+function addSnakeBodyElement()
+{
+	var x = parseInt(window.snakeBody[window.snakeBody.length - 1].style.left, 10);
+	var y = parseInt(window.snakeBody[window.snakeBody.length - 1].style.top, 10);
+	window.snakeBody.push(createSnakeBlock(x,y));
+	window.snakeBodyCount++;
+}
+
+
+function growSnake()
+{
+	if(window.snakeBody.length < 10)
+	{
+		addSnakeBodyElement();
+	}
+	addSnakeBodyElement();
 }
 
 function deleteOldFood()
@@ -167,12 +237,7 @@ function placeRandomFood()
 	window.foodGridPosy = GridFromCoordy(Math.random() * window.boardHeight);
 	while(collision(window.foodGridPosx, window.foodGridPosy))
 	{
-		//if we were going to place the new food somewhere that's already occupied, 
-		//retry the random placement until we place on an empty square
-		
-		//NOTE: This scales really poorly if your snake ever gets big enough to fill
-		//up most of the screen...
-
+		//if we're going to place the new food somewhere that's already occupied, retry the random placement
 		window.foodGridPosx = GridFromCoordx(Math.random() * window.boardWidth);
 		window.foodGridPosy = GridFromCoordy(Math.random() * window.boardHeight);
 	}
@@ -196,115 +261,8 @@ function Update()
 	}
 }
 
-function growSnake()
-{
-	if(window.snakeBody.length < 10)
-	{
-		addSnakeBodyElement();
-	}
-	addSnakeBodyElement();
-}
-function Move()
-{
-	/*
-		In this function, we pop the last snake body element off the back of the array.  We move it
-		to the next position (wherever our current head is + one square in the direction we were traveling)
-		and then insert the element back into the front of the array (that's what unshift does)
-	*/
-	var elm = window.snakeBody.pop();
-	window.snakeHeadPosx += window.xmove[window.snakeDir];
-	window.snakeHeadPosy += window.ymove[window.snakeDir];
-	elm.style.left = CoordFromGridx(window.snakeHeadPosx);
-	elm.style.top = CoordFromGridy(window.snakeHeadPosy);
-	window.snakeBody.unshift(elm);
-
-	checkAteFood();
-
-	checkDeath();
-}
 function runSnake()
 {
 	CreateGlobals();
 	Update();
 }
-
-
-//------ your code all goes below this line ------//
-
-function checkDeath()
-{
-	/*
-		This function checks to see if your snake died.
-
-		Your snake dies if it goes out of bounds (which we've written for you), or if it
-		runs into it's own tail.  You need to write the logic to check and see if the snake has
-		run into itself.
-
-		We've provided a function called collision() (which you need to finish) which you should 
-		figure out how to use here.
-	*/
-
-	if(window.snakeHeadPosx < 0 || window.snakeHeadPosx  >= window.boardWidth / window.gridBlockWidth ||
-		window.snakeHeadPosy < 0 || window.snakeHeadPosy  >= window.boardHeight / window.gridBlockHeight)
-	{
-		window.isAlive = false;
-	}
-	if(false /*TODO: YOUR CODE GOES HERE (replace the 'false' with your code)*/)
-	{
-		window.isAlive = false;
-	}
-}
-function checkAteFood()
-{
-	//This function checks to see if our snake has just eaten the food.  If it has, we delete the old
-	//food, create a new piece of food, and grow our snake.
-
-	//HINT:
-	//How do we test if our snake just ate our food?
-	//Read the code to find out what functions we need to call to delete our old food, 
-	//    create new food, and grow your snake
-	
-	/*TODO: YOUR CODE GOES HERE*/
-
-}
-function addSnakeBodyElement()
-{
-	var x = parseInt(window.snakeBody[window.snakeBody.length - 1].style.left, 10);
-	var y = parseInt(window.snakeBody[window.snakeBody.length - 1].style.top, 10);
-	
-	//alright, we know where our snake body element goes (x,y), but how do we actually add it?
-	//We're going to have to call createSnakeBlock(), but what do we do with the result? 
-
-	//HINT: We do something simillar (though not quite the same) at the end of our CreateGlobals() function
-
-	/*TODO: YOUR CODE GOES HERE*/
-
-	window.snakeBodyCount++;
-}
-
-function collision(x, y, startIndex)
-{
-
-	//This function returns true if the grid coordinate x,y is occupied by part of the existing snake
-	//note that x and y are Grid indexes, not pixel coordinates
-
-	//this means if somebody only calls us with x, y, we will default to starting at 0
-	if(typeof startIndex == 'undefined')
-	{
-		startIndex = 0;
-	}
-
-	for(var i = startIndex; i < window.snakeBody.length; i++)
-	{
-		//how would you test if x and y were occupying the same space as a given element of 
-		//the snake body?
-
-		//HINT: 
-		//addSnakeBodyElement() also has to find the pixel coordinates from snakeBody
-		//placeRandomFood() also to go from pixel coordinates to grid coordinates
-
-		/*TODO: YOUR CODE GOES HERE*/
-	}
-	return false;
-}
-
