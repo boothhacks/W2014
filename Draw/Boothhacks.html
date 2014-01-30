@@ -2,7 +2,7 @@
 <head>
 
 <script type="text/javascript">
-function drawShape(ctx, radians, granularity, divisor, scalar, xoffset, yoffset)
+function drawShape(ctx, radians, granularity, divisor, scalar, xoffset, yoffset, thetaoffset)
 {
 
 	var pointsx = new Array();
@@ -14,8 +14,8 @@ function drawShape(ctx, radians, granularity, divisor, scalar, xoffset, yoffset)
 		var r = 100 * Math.sin(scalar/divisor*theta);
 
 		//convert to cartesian coordinates, add an offset so we can show multiple graphs on one screen
-		var x = xoffset + r * Math.cos(theta);
-		var y = yoffset + r * Math.sin(theta);
+		var x = xoffset + r * Math.cos(theta + thetaoffset);
+		var y = yoffset + r * Math.sin(theta + thetaoffset);
 
 		//push the values onto the back of the arrays
 		pointsx.push(x);
@@ -79,13 +79,13 @@ function drawWord(ctx, text, font, x, y, gradWidth, gradHeight, color1, color2)
 	ctx.strokeStyle=grd;
 
 	ctx.lineWidth = 1;
-	drawShape(ctx, 161, 1, 5.1, 8, x, y);
+	drawShape(ctx, 161, 1, 5.1, 8, x, y, 0);
 	
 
 	ctx.lineWidth = 90;
 	ctx.strokeStyle= "#FFFFFF";
 	ctx.beginPath();
-	ctx.arc(x,y, 100/2 + 10, 1.55 * Math.PI, 1.95 * Math.PI);
+	ctx.arc(x,y, 100/2 + 10, 1.56 * Math.PI, 1.95 * Math.PI);
 	ctx.stroke();
 	
 
