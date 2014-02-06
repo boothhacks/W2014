@@ -1,0 +1,19 @@
+body
+{
+	background-image:url('file:///C:/Users/John/Desktop/photo.jpg');
+	background-repeat:no-repeat;
+	background-position:50% -30%;
+}
+.h1
+{
+	text-align:center;
+	color:blue;
+}
+.p
+{
+	text-align: center;
+}
+.button
+{
+	text-align: center;
+}
