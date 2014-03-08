@@ -7,7 +7,7 @@ Example:
 ReverseString(hello) -> olleh
 ReverseString(lots of words) -> sdrow fo stol
 	*/
-
+return "";
 }
 
 function Fashion(you, date)
@@ -24,6 +24,7 @@ date_fashion(5, 10) → 2
 date_fashion(5, 2) → 0
 date_fashion(5, 5) → 1
 	*/
+	return 0;
 
 }
 function NearTen(num)
@@ -36,6 +37,7 @@ near_ten(12) → True
 near_ten(17) → False
 near_ten(19) → True
 	*/
+	return false;
 	
 }
 function FixTeen(a)
@@ -43,6 +45,7 @@ function FixTeen(a)
 	//This function might be helfpul to implement for NoTeenSum, below.  You don't have to use this function though.
 	//If you do choose to use it, you might want to do something like fixing the number to match the rules
 	//given in NoTeenSum.  This would be so you don't have to write the same logic 3 different times, once for a, b, and c
+	return a;
 }
 function NoTeenSum(a, b, c)
 {
@@ -55,6 +58,7 @@ no_teen_sum(2, 13, 1) → 3
 no_teen_sum(2, 1, 14) → 3
 */
 
+	return a + b + c;
 
 }
 function LoneSum(a, b, c)
@@ -68,6 +72,8 @@ lone_sum(3, 2, 3) → 2
 lone_sum(3, 3, 3) → 0
 */
 
+	return a + b + c;
+
 }
 function IsPrime(number)
 {
@@ -79,5 +85,5 @@ Example:
 	IsPrime(8) -> false
 	IsPrime(11) -> true
 	*/
-	
+	return false;
 }
