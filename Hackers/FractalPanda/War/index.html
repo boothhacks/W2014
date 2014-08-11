@@ -1,0 +1,52 @@
+<html>
+<head>
+
+<script type="text/javascript" src="constants.js"></script>
+<script type="text/javascript" src="resource.js"></script>
+<script type="text/javascript" src="unit.js"></script>
+
+<script type="text/javascript" src="warbase.js"></script>
+<script type="text/javascript" src="resource_description.js"></script>
+<script type="text/javascript" src="action_description.js"></script>
+<script type="text/javascript" src="unit_description.js"></script>
+<script type="text/javascript" src="warbase_description.js"></script>
+
+<script type="text/javascript" src="warplan.js"></script>
+
+<script type="text/javascript" src="warrior1.js"></script>
+<script type="text/javascript" src="warrior2.js"></script>
+
+<script type="text/javascript" src="war.js"></script>
+
+</head>
+<body>
+	<div id="board"></div>
+    <div id="scoreboard">
+        <div id="scoreboard-score1">
+            <table id="scoreboard-score1-table">
+                <tr>
+                    <td id="scoreboard-score1-table-units"></td>
+                    <td id="scoreboard-score1-table-energy"></td>
+                    <td id="scoreboard-score1-table-money"></td>
+                    <td id="scoreboard-score1-table-base"></td>
+                </tr>
+            </table>
+        </div>
+         <div id="scoreboard-score2">
+            <table id="scoreboard-score2-table">
+                <tr>
+                    <td id="scoreboard-score2-table-units"></td>
+                    <td id="scoreboard-score2-table-energy"></td>
+                    <td id="scoreboard-score2-table-money"></td>
+                    <td id="scoreboard-score2-table-base"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="game-timer">
+    </div>
+<script>
+	runWar();
+</script>
+</body>
+</html>
