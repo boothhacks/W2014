@@ -2,6 +2,7 @@ function Warrior1()
 {
     this.warplan = null;
     this.initialDelay = 30000;
+    this.spawnAttacking = false;
     this.canAfford = function(unitType)
     {
         if(this.warplan.energy >= EnergyCost[unitType] && this.warplan.money >= MoneyCost[unitType])
@@ -12,98 +13,311 @@ function Warrior1()
     }
     this.ChooseBaseAction = function()
     {
-        //TODO: count how many of each unit type I have.  Make decisions based on that.
-        var scoutCount = 0;
-        var gatlingCount = 0;
-        var sniperCount = 0;
-        var brawlerCount = 0;
-        for(var i = 0; i < this.warplan.myUnits.length; i++)
+        this.enemyUnitCounts = {};
+        this.myUnitCounts = {};
+        for(var k in UnitTypeEnum)
         {
-            if(this.warplan.myUnits[i].unitType == UnitTypeEnum.SCOUT)
-            {
-                scoutCount++;
-            }
-            if(this.warplan.myUnits[i].unitType == UnitTypeEnum.GATLING)
-            {
-                gatlingCount++;
-            }
-            if(this.warplan.myUnits[i].unitType == UnitTypeEnum.SNIPER)
-            {
-                sniperCount++;
-            }
-            if(this.warplan.myUnits[i].unitType == UnitTypeEnum.BRAWLER)
-            {
-                brawlerCount++;
-            }
-         
+            this.enemyUnitCounts[UnitTypeEnum[k]] = 0;
+            this.myUnitCounts[UnitTypeEnum[k]] = 0;
         }
-        var enemyscoutCount = 0;
-        var enemygatlingCount = 0;
-        var enemysniperCount = 0;
-        var enemybrawlerCount = 0;
-        var enemybombadierCount = 0;
         for(var i = 0; i < this.warplan.enemyUnits.length; i++)
         {
-            if(this.warplan.enemyUnits[i].unitType == UnitTypeEnum.SCOUT)
-            {
-                enemyscoutCount++;
-            }
-            if(this.warplan.enemyUnits[i].unitType == UnitTypeEnum.GATLING)
-            {
-                enemygatlingCount++;
-            }
-            if(this.warplan.enemyUnits[i].unitType == UnitTypeEnum.SNIPER)
-            {
-                enemysniperCount++;
-            }
-            if(this.warplan.enemyUnits[i].unitType == UnitTypeEnum.BRAWLER)
-            {
-                enemybrawlerCount++;
-            }
-            if(this.warplan.enemyUnits[i].unitType == UnitTypeEnum.BOMBADIER)
-            {
-                enemybombadierCount++;
-            }
+            this.enemyUnitCounts[this.warplan.enemyUnits[i].unitType] += 1;
         }
-        var totalUnits = scoutCount + gatlingCount + sniperCount + brawlerCount;
-        var totalenemyUnits = enemyscoutCount + enemygatlingCount + enemysniperCount + enemybrawlerCount;
+        for(var i = 0; i < this.warplan.myUnits.length; i++)
+        {
+            this.myUnitCounts[this.warplan.myUnits[i].unitType] += 1;
+        }
+        this.totalenemyUnits = 0;
+        this.totalmyUnits = 0;
+        for(var k in UnitTypeEnum)
+        {  
+            this.totalenemyUnits += this.enemyUnitCounts[UnitTypeEnum[k]];
+            this.totalmyUnits += this.myUnitCounts[UnitTypeEnum[k]];
+        }
 
         current = (new Date()).getTime() 
-        if((scoutCount < 3 && totalenemyUnits < 6) || (this.warplan.resources.length > 10 && scoutCount < 4) || 
-            (this.warplan.resources.length > 15 && scoutCount < 5) && this.canAfford(UnitTypeEnum.SCOUT))
+        if((this.myUnitCounts[UnitTypeEnum.SCOUT] < 3  || (this.warplan.resources.length > 10 && this.myUnitCounts[UnitTypeEnum.SCOUT] < 4) || 
+            (this.warplan.resources.length > 15 && this.myUnitCounts[UnitTypeEnum.SCOUT] < 5)) && this.totalenemyUnits - this.totalmyUnits < 4 && 
+            this.canAfford(UnitTypeEnum.SCOUT))
         {
+            //if I don't have enough scouts on the field, that's the first priority
             this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.SCOUT);
         }
-        //If they have snipers on the field, I do NOT want a gatling
-        else if(gatlingCount < 1 && this.canAfford(UnitTypeEnum.GATLING) && enemysniperCount < 1)
+        else if(current - this.warplan.startTime < 8000)
         {
+            console.log("waiting for other guy to make his move...")
+            //let them make the first move, then I react
+        }
+        else if(this.myUnitCounts[UnitTypeEnum.TANK] < 1 && this.totalenemyUnits > 15 && this.totalenemyUnits - this.totalmyUnits < 4)
+        {
+            //if there's a LOT of enemies on the field, I want AOE even if I have to wait for it, unless I'm really outnumbered
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.TANK);   
+        }
+        else if(this.enemyUnitCounts[UnitTypeEnum.SNIPER] > 3 && this.canAfford(UnitTypeEnum.SWARM) && this.enemyUnitCounts[UnitTypeEnum.GATLING] < 1)
+        {
+            //Get 'em, boys!
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.SWARM);
+        }
+        /*else if(this.myUnitCounts[UnitTypeEnum.TANK] < 1 && this.canAfford(UnitTypeEnum.TANK))
+        {
+            //If I don't have a tank and I can afford one, get it
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.TANK);
+        }*/
+        else if(this.myUnitCounts[UnitTypeEnum.TANK] < 3 && this.canAfford(UnitTypeEnum.TANK) && this.totalmyUnits > 12)
+        {
+            //If I can afford a tank, and I already have a bunch of units, buy another tank
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.TANK);
+        }
+        else if(this.myUnitCounts[UnitTypeEnum.GATLING] < 1 && this.canAfford(UnitTypeEnum.GATLING) && 
+            (this.enemyUnitCounts[UnitTypeEnum.SNIPER] < 1 || (this.totalmyUnits > 15 && this.enemyUnitCounts[UnitTypeEnum.SNIPER] < 3))
+            && this.enemyUnitCounts[UnitTypeEnum.TANK] < 1 && current - this.warplan.startTime > 10000)
+        {
+            //If they have snipers on the field, I do NOT want a gatling
             this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.GATLING);
         }
-        else if(gatlingCount < 1 && enemybrawlerCount > 2 && enemysniperCount < 1)
+        else if(this.myUnitCounts[UnitTypeEnum.GATLING] < 1 && this.enemyUnitCounts[UnitTypeEnum.BRAWLER] > 2 && 
+            this.enemyUnitCounts[UnitTypeEnum.SNIPER] < 1 && this.enemyUnitCounts[UnitTypeEnum.TANK] < 1)
         {
-            //if there's at least 3 brawlers in the field, I want to save for a gatling
+            //if there's at least 3 brawlers and no snipers in the field, I want to save for a 
+            //gatling even if I can't afford it right now
             this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.GATLING);
         }
-        //If they have Brawlers on the field, I do NOT want a sniper
-        else if(sniperCount < 3 && this.canAfford(UnitTypeEnum.SNIPER) && enemybrawlerCount < 3)
+        else if(this.myUnitCounts[UnitTypeEnum.TANK] < 2 && this.totalenemyUnits > 10 && this.canAfford(UnitTypeEnum.TANK))
         {
-         this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.SNIPER);
+            //if there's a lot of enemies on the field, I want AOE
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.TANK);   
         }
-        //if they have Gatlings on the field, I do NOT want a brawler
-        else if(brawlerCount < 5 && this.canAfford(UnitTypeEnum.BRAWLER) && enemygatlingCount < 1)
+        else if(this.myUnitCounts[UnitTypeEnum.SNIPER] < 3 && this.canAfford(UnitTypeEnum.SNIPER) && 
+            this.enemyUnitCounts[UnitTypeEnum.BRAWLER] < (this.myUnitCounts[UnitTypeEnum.SNIPER] + 1) * 2.5 && 
+            this.enemyUnitCounts[UnitTypeEnum.SWARM] < (this.myUnitCounts[UnitTypeEnum.SNIPER] + 2) * 3)
         {
+            //If they have Brawlers or swarms on the field, I do NOT want a sniper
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.SNIPER);
+        }
+        else if(this.myUnitCounts[UnitTypeEnum.BRAWLER] < 5 && this.canAfford(UnitTypeEnum.BRAWLER) && 
+            this.enemyUnitCounts[UnitTypeEnum.GATLING] < 1)
+        {
+            //if they have Gatlings on the field, I do NOT want a brawler
             this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.BRAWLER);      
         }
-        else if(enemygatlingCount > 0 || enemybombadierCount > 0)
+        else if(this.enemyUnitCounts[UnitTypeEnum.GATLING] > 0)
         {
             //I need snipers, even if I can't afford them
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.SNIPER);      
+        }
+        else if(this.canAfford(UnitTypeEnum.SNIPER) && this.totalenemyUnits - this.totalmyUnits < 1)
+        {
             this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.SNIPER);      
         }
         else if(this.canAfford(UnitTypeEnum.GUNNER))
         {
             this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.GUNNER);         
         }
-        
+        else if(this.canAfford(UnitTypeEnum.SWARM) && this.enemyUnitCounts[UnitTypeEnum.GATLING] < 1)
+        {
+            this.warplan.myBase.actionDescription = new ActionDescription(ActionEnum.SPAWN, UnitTypeEnum.SWARM);            
+        }
+    }
+    this.ChooseScoutActions = function()
+    {
+        //TODO: Scouts could move much smarter
+        //have them target resources based on who's closest
+        //instead of chasing the base, have them run away from the center of mass of all friendly scouts
+        //(toward the enemy base if they're the only scout)
+        //Make sure there's some randomness so they end up scattering
+        //if one direction is sealed off, try running in the opposite
+        //add a "persistent storage" dictionary for people to use across turns?
+        //check if path to resource goes through target zone
+        //use pathfinding to determine closest resource, and follow the path!
+
+    }
+    this.ChooseSniperActions = function()
+    {
+        //Target enemy Gatling's first, then enemy Snipers, then enemy Gunners... 
+        //don't target swarm unless you have to? 
+    }
+    this.ChooseSwarmActions = function()
+    {
+        //TODO: if enemies are overlapping, choose ones that haven't been chosen!  Or at least choose a random one.
+        for(var i = 0; i < this.warplan.myUnits.length; i++)
+        {
+            if(this.warplan.myUnits[i].unitType != UnitTypeEnum.SWARM)
+            {
+              continue;
+            }
+            closestUnit = null;
+            closestDistance = 120;
+            var almostInRangeOf = new Array();
+            for(var j = 0; j < this.warplan.enemyUnits.length; j++)
+            {
+                distance = Math.pow(
+                             Math.pow(this.warplan.myUnits[i].x - this.warplan.enemyUnits[j].x, 2) + 
+                             Math.pow(this.warplan.myUnits[i].y - this.warplan.enemyUnits[j].y, 2), 
+                             0.5);
+                buffer = 2;
+                if(distance < this.warplan.enemyUnits[j].range + buffer)
+                {
+                    almostInRangeOf.push(this.warplan.enemyUnits[j]);
+                }
+                if(this.warplan.enemyUnits[j].speed >= this.warplan.myUnits[i].speed &&
+                    distance > this.warplan.myUnits[i].range)
+                {
+                    //If there's an enemy in range who's faster than me, ignore them
+                    continue;
+                }
+                if(this.warplan.enemyUnits[j].unitType == UnitTypeEnum.SNIPER && 
+                    ((closestUnit && closestUnit.unitType != UnitTypeEnum.SNIPER) || !closestUnit))
+                {
+                   //if the enemy I'm looking at is a sniper and 
+                   //(I'm not targeting anyone or I'm targeting a non-sniper)
+                   //then target this guy (means I always target a sniper if there's one nearby)
+                   closestUnit = this.warplan.enemyUnits[j];
+                   closestDistance = distance; 
+                }
+                else if(distance < closestDistance && ((closestUnit && closestUnit.unitType != UnitTypeEnum.SNIPER) || !closestUnit))
+                {
+                    //TODO: differntiate between destination target and attack target.  Should at least attack somebody if they're next to me!
+
+                    //either this guy isn't a sniper, or he is a sniper but I already have a sniper targeted
+                    //if this guy is closer than the current closest and 
+                    //(I'm not targeting anyone or the current target isn't a sniper)
+                    //choose this guy.  That means I'll target the closest guy, assuming there's no sniper in ranger.  Otherwise, 
+                    //I'll target the sniper
+                    closestUnit = this.warplan.enemyUnits[j];
+                    closestDistance = distance;
+                }
+            }
+            if(this.myUnitCounts[UnitTypeEnum.SWARM] < (this.enemyUnitCounts[UnitTypeEnum.SNIPER] * 2 + this.enemyUnitCounts[UnitTypeEnum.SNIPER] * 2 ))
+            {
+                this.swarmAttacking == false;
+            }
+            //batch my Swarm waves
+            //don't swarm if there's a gatling, or you'll get slaughtered
+            //be afraid of gunners as well
+            //...but you should still attack if you're in range of someone
+            if(
+                ((this.myUnitCounts[UnitTypeEnum.SWARM] < this.enemyUnitCounts[UnitTypeEnum.SNIPER] * 4 + this.enemyUnitCounts[UnitTypeEnum.GUNNER] * 4 && 
+                   almostInRangeOf.length == 0 && !this.swarmAttacking) ||
+                 this.enemyUnitCounts[UnitTypeEnum.GATLING] > 0 || 
+                 (this.myUnitCounts[UnitTypeEnum.SWARM] < 15 && !this.swarmAttacking)) 
+              && almostInRangeOf.length < 1 )
+            {
+                //go to my own base
+                this.warplan.myUnits[i].actionDescription = null;
+                x =  this.warplan.myBase.x - this.warplan.myUnits[i].x
+                y = this.warplan.myBase.y - this.warplan.myUnits[i].y
+                
+                this.warplan.myUnits[i].moveDirection = new Array(x, y);  
+                this.warplan.myUnits[i].moveSpeed = this.warplan.myUnits[i].speed;
+               continue;
+            }
+            if(this.myUnitCounts[UnitTypeEnum.SWARM] > this.enemyUnitCounts[UnitTypeEnum.SNIPER] * 7 && this.enemyUnitCounts[UnitTypeEnum.GATLING] < 1)
+            {
+                this.swarmAttacking = true;
+            }
+            if(closestUnit == null)
+            {
+                //see if the enemy base is in range, set that as closest unit
+                enemyBaseDistance = Math.pow(
+                Math.pow(this.warplan.myUnits[i].x - this.warplan.enemyBase.x, 2) + 
+                Math.pow(this.warplan.myUnits[i].y - this.warplan.enemyBase.y, 2), 
+                0.5);
+                if(enemyBaseDistance < closestDistance)
+                {
+                    closestUnit = this.warplan.enemyBase;
+                    closestDistance = enemyBaseDistance;
+                }
+            }
+            //if we didn't find a targetable unit, just head towards the enemy base
+            if(closestUnit == null)
+            {
+                this.warplan.myUnits[i].actionDescription = null;
+                x =  this.warplan.enemyBase.x - this.warplan.myUnits[i].x
+                y = this.warplan.enemyBase.y - this.warplan.myUnits[i].y
+                
+                this.warplan.myUnits[i].moveDirection = new Array(x, y);  
+                this.warplan.myUnits[i].moveSpeed = this.warplan.myUnits[i].speed;
+            }
+            //if we DID find a targetable unit...
+            else
+            {
+                //try attacking the unit if able
+                if(closestDistance < this.warplan.myUnits[i].range)
+                {
+                    this.warplan.myUnits[i].actionDescription = 
+                        new ActionDescription(ActionEnum.ATTACK, new Array(closestUnit.x, closestUnit.y));
+                }
+
+                //first, check if we're near any hazards- like the edge- and run away!
+                buffer = this.warplan.myUnits[i].speed - 1;
+                if( (this.warplan.myUnits[i].x < this.warplan.minx + buffer || this.warplan.myUnits[i].x > this.warplan.maxx - buffer) ||
+                    (this.warplan.myUnits[i].y < this.warplan.miny + buffer || this.warplan.myUnits[i].y > this.warplan.maxy - buffer))
+                {
+                    //move towards the middle
+                    x = (this.warplan.minx + this.warplan.maxx)/2 - this.warplan.myUnits[i].x;
+                    y = (this.warplan.miny + this.warplan.maxy)/2 - this.warplan.myUnits[i].y;
+                    this.warplan.myUnits[i].moveDirection = new Array(x, y);  
+                        this.warplan.myUnits[i].moveSpeed = this.warplan.myUnits[i].speed;
+                }
+                else
+                {
+                    buffer = 2;
+                    //we want to stay at the edge of our range if we can, so move away from the nearest unit
+                    x = closestUnit.x - this.warplan.myUnits[i].x
+                    y = closestUnit.y - this.warplan.myUnits[i].y
+                    if(closestDistance < this.warplan.myUnits[i].range - buffer)
+                    {
+                        this.warplan.myUnits[i].moveDirection = new Array(-x, -y);  
+                        this.warplan.myUnits[i].moveSpeed = Math.max(Math.min(
+                            this.warplan.myUnits[i].speed, this.warplan.myUnits[i].range - closestDistance - buffer), 0);    
+                    }
+                    else
+                    {
+                        this.warplan.myUnits[i].moveDirection = new Array(x, y);  
+                        this.warplan.myUnits[i].moveSpeed = Math.max(Math.min(
+                            this.warplan.myUnits[i].speed, closestDistance), 0);       
+                    }
+                }
+            }
+            //don't spread if you are within striking distance
+            if(this.warplan.myUnits[i].moveDirection && closestDistance > this.warplan.myUnits[i].range + 8)
+            {
+               //spread apart to avoid AOE damage
+               //find the center of gravity of all nearby units and move away from that
+
+               //also, it looks cool :)
+               centerx = 0;
+               centery = 0;
+               closeCount = 0;
+               radius = 4;
+               strength = 1;
+               for(var k = 0; k < this.warplan.myUnits.length; k++)
+               {
+                 if(Math.abs(this.warplan.myUnits[i].x - this.warplan.myUnits[k].x) < radius && 
+                     Math.abs(this.warplan.myUnits[i].y - this.warplan.myUnits[k].y) < radius)
+                  {
+                    centerx = centerx + this.warplan.myUnits[k].x;
+                    centery = centery + this.warplan.myUnits[k].y;
+                    closeCount = closeCount + 1;
+                  }
+               }
+               //closeCount should never be 0, since we're inclided in the closeCount
+               centerx = centerx / closeCount;
+               centery = centery / closeCount;
+               if(this.warplan.myUnits[i].x != centerx || this.warplan.myUnits[i].y != centery)
+               {
+                   x = centerx - this.warplan.myUnits[i].x;
+                   y = centery - this.warplan.myUnits[i].y;
+                   d1 = Math.pow(Math.pow(x, 2) + Math.pow(y, 2), 0.5);
+                   d2 = Math.pow(Math.pow(this.warplan.myUnits[i].moveDirection[0], 2) + Math.pow(this.warplan.myUnits[i].moveDirection[1], 2), 0.5);
+                   this.warplan.myUnits[i].moveDirection[0] += strength * (-x * d2 / d1 + (Math.random() - 0.5));
+                   this.warplan.myUnits[i].moveDirection[1] += strength * (-y * d2  / d1 + (Math.random() - 0.5));
+               }
+               this.warplan.myUnits[i].moveDirection[0] += (Math.random() - 0.5) * 3;
+               this.warplan.myUnits[i].moveDirection[1] += (Math.random() - 0.5) * 3;
+            }
+        }   
     }
     this.ChooseUnitActions = function()
     {
@@ -119,6 +333,7 @@ function Warrior1()
                              Math.pow(this.warplan.myUnits[i].y - this.warplan.enemyUnits[j].y, 2), 
                              0.5);
                 buffer = 2;
+                //TODO: if there's a sniper or gatling in range, target it!
                 if(distance < this.warplan.enemyUnits[j].range + buffer)
                 {
                     almostInRangeOf.push(this.warplan.enemyUnits[j]);
@@ -134,16 +349,6 @@ function Warrior1()
                     {
                         continue;
                     }
-                }
-                if(this.warplan.myUnits[i].unitType == UnitTypeEnum.SCOUT)
-                {
-                    //if I'm a scout, ignore everybody but brawlers.  Too much jumping around trying
-                    //to dodge ranged attacks
-                    //NVM.  Appears this doesn't actually work, makes me lose
-                    //if(this.warplan.enemyUnits[j].unitType != UnitTypeEnum.BRAWLER)
-                    //{
-                    //    continue;
-                    //}
                 }
                 if(distance < closestDistance)
                 {
@@ -246,8 +451,9 @@ function Warrior1()
             if(closestUnit == null)
             {
                 this.warplan.myUnits[i].actionDescription = null;
-                x = this.warplan.enemyBase.x - this.warplan.myUnits[i].x
+                x =  this.warplan.enemyBase.x - this.warplan.myUnits[i].x
                 y = this.warplan.enemyBase.y - this.warplan.myUnits[i].y
+                
                 this.warplan.myUnits[i].moveDirection = new Array(x, y);  
                 this.warplan.myUnits[i].moveSpeed = this.warplan.myUnits[i].speed;
             }
@@ -356,7 +562,45 @@ function Warrior1()
                     }
                 }
             }
-        }   
+            //don't spread if you are within striking distance
+            if(this.warplan.myUnits[i].moveDirection && closestDistance > this.warplan.myUnits[i].range + 8)
+            {
+               //spread apart to avoid AOE damage
+               //find the center of gravity of all nearby units and move away from that
+
+               //also, it looks cool :)
+               centerx = 0;
+               centery = 0;
+               closeCount = 0;
+               radius = 4;
+               strength = 1;
+               for(var k = 0; k < this.warplan.myUnits.length; k++)
+               {
+                 if(Math.abs(this.warplan.myUnits[i].x - this.warplan.myUnits[k].x) < radius && 
+                     Math.abs(this.warplan.myUnits[i].y - this.warplan.myUnits[k].y) < radius)
+                  {
+                    centerx = centerx + this.warplan.myUnits[k].x;
+                    centery = centery + this.warplan.myUnits[k].y;
+                    closeCount = closeCount + 1;
+                  }
+               }
+               //closeCount should never be 0, since we're inclided in the closeCount
+               centerx = centerx / closeCount;
+               centery = centery / closeCount;
+               if(this.warplan.myUnits[i].x != centerx || this.warplan.myUnits[i].y != centery)
+               {
+                   x = centerx - this.warplan.myUnits[i].x;
+                   y = centery - this.warplan.myUnits[i].y;
+                   d1 = Math.pow(Math.pow(x, 2) + Math.pow(y, 2), 0.5);
+                   d2 = Math.pow(Math.pow(this.warplan.myUnits[i].moveDirection[0], 2) + Math.pow(this.warplan.myUnits[i].moveDirection[1], 2), 0.5);
+                   this.warplan.myUnits[i].moveDirection[0] += strength * (-x * d2 / d1 + (Math.random() - 0.5));
+                   this.warplan.myUnits[i].moveDirection[1] += strength * (-y * d2  / d1 + (Math.random() - 0.5));
+               }
+               this.warplan.myUnits[i].moveDirection[0] += (Math.random() - 0.5) * 3;
+               this.warplan.myUnits[i].moveDirection[1] += (Math.random() - 0.5) * 3;
+            }
+        }  
+        this.ChooseSwarmActions(); 
     }
     this.Execute = function(warplan)
     {

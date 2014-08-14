@@ -17,13 +17,13 @@ function Warbase(x, y, team)
     this.maxHealth = 1000;
     this.currentHealth = this.maxHealth;
     this.AI = null;
-    this.money = 200;
-    this.energy = 200;
-    this.energyRegen = 0.3;
-    this.moneyRegen = 0.3;
+    this.money = 400;
+    this.energy = 400;
+    this.energyRegen = 0.5;
+    this.moneyRegen = 0.5;
     this.cooldown = 1000;
     this.lastAction = (new Date()).getTime() - this.cooldown;
-    this.maxUnitCount = 15;
+    this.maxUnitCount = 50;
     this.currentUnitCount = 0;
     this.team = team;
     this.size = 15;
@@ -55,25 +55,31 @@ function Warbase(x, y, team)
     {
       window.board.removeChild(this.block);
     }
-    this.spawnUnit = function(unitType)
+    this.spawnUnit = function(unitType, skipValidation)
     {
-        if(this.checkUnitAvailable())
+        if(this.checkUnitAvailable() || skipValidation)
         {
             x = CoordFromGridx(this.x), 
             y = CoordFromGridy(this.y)
             unit = new Unit(unitType, this.team, x, y);
-            if(this.energy > unit.energyCost && this.money > unit.moneyCost)
+            if((this.energy > unit.energyCost && this.money > unit.moneyCost) || skipValidation)
             {
               window.units.push(unit);
               this.currentUnitCount++;
-              this.energy -= unit.energyCost;
-              this.money -= unit.moneyCost;
+              if(!skipValidation)
+              {
+                this.energy -= unit.energyCost;
+                this.money -= unit.moneyCost;
+              }
+              return true;
             }
             else
             {
                 unit.deleteBlock()
+                return false;
             }
         }
+        return false;
     }
     this.unitDied = function(team)
     {
@@ -95,9 +101,13 @@ function Warbase(x, y, team)
           switch(actionDescription.actionEnum)
           {
             case (ActionEnum.SPAWN):
-                this.spawnUnit(
-                    actionDescription.params
-                );
+                result = this.spawnUnit(actionDescription.params, false);
+                if(actionDescription.params == UnitTypeEnum.SWARM && result)
+                {
+                    //if we spawn a swarm, spawn a few more!
+                    this.spawnUnit(actionDescription.params, true);
+                    this.spawnUnit(actionDescription.params, true);
+                }
                 break;
             default:
                 break;

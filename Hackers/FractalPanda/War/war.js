@@ -3,14 +3,21 @@ window.Attack =  function(xfrom, yfrom, xto, yto, range, attack, aoe, team)
     if(Math.pow(Math.pow(xfrom - xto, 2) + Math.pow(yfrom - yto, 2), 0.5) < range)
     {
         //TODO: add raytracing and wall detection
+        window.Lines.push(new Line(CoordFromGridx(xfrom), CoordFromGridy(yfrom), CoordFromGridx(xto), CoordFromGridy(yto), team));
         collisions = collision(xto, yto);
         for(var j = 0; j < collisions.length; j++)
         {
             if(collisions[j].team != team)
             {
+              if(collisions[j].currentHealth <= 0)
+              {
+                //already died this turn!
+                continue;
+              }
               console.log(collisions[j].ID + ' taking ' + attack + ' damage');
               collisions[j].damage(attack);
-              if(aoe == false)
+              if(aoe == false) //disabling for now... otherwise units can hide behind other units.  Maybe
+                //we want that though, to add to the strategy?
               {
                 return;
               }
@@ -31,13 +38,14 @@ function CreateGlobals()
     window.LastResourceTime = window.StartTime;
     window.ResourceSpawnTime = 1500;
     window.MaxResourceAmount = 70;
+    window.Lines = new Array();
 
 	window.gridBlockWidth = 3;
 	window.gridBlockHeight = 3;
 	window.currentGridPosx = 0;
 	window.currentGridPosy = 0;
-	window.boardWidth = 900;
-	window.boardHeight = 700;
+	window.boardWidth = window.innerWidth - 50;
+	window.boardHeight = window.innerHeight - 100;
 
     window.unitCount = 0;
     window.baseCount = 0;
@@ -63,7 +71,7 @@ function CreateGlobals()
     window.baseOne.generateBlock();
     window.baseTwo.generateBlock();
 
-    window.baseOne.AI = eval("new Warrior1()");
+    window.baseOne.AI = eval("new Warrior2()");
     window.baseTwo.AI = eval("new Warrior1()");
 
     window.units1 = document.getElementById("scoreboard-score1-table-units");
@@ -88,6 +96,10 @@ function resetGame()
     for(var i = 0; i < window.resources.length; i++)
     {
         window.board.removeChild(window.resources[i].block)
+    }
+    for(var i = 0; i < window.Lines.length; i++)
+    {
+        window.board.removeChild(window.Lines[i].block)
     }
 	window.baseOne.deleteBlock();
     window.baseTwo.deleteBlock();
@@ -141,6 +153,7 @@ function Cleanup()
             window.units[i].deleteBlock();
             window.units[i] = null;
             window.units.splice(i, 1);
+            i--;
         }
     }
     for(var i = 0; i < window.resources.length; i++)
@@ -151,6 +164,35 @@ function Cleanup()
             window.resources[i].deleteBlock();
             window.resources[i] = null;
             window.resources.splice(i, 1);
+            i--;
+        }
+    }
+    currenttime = (new Date()).getTime();
+    fade = 250;
+    for(var i = 0; i < window.Lines.length; i++)
+    {
+        if(window.Lines[i].team == window.baseOne.team)
+        {
+            window.Lines[i].block.setAttribute('style','border:1px solid rgba(255, 0, 0, ' + 
+                (1 - Math.max(currenttime - window.Lines[i].startTime, 0)/fade) + ');width:'+window.Lines[i].width+
+                'px;height:0px;-moz-transform:rotate('+window.Lines[i].deg+'deg);-webkit-transform:rotate('+
+                window.Lines[i].deg+'deg);position:absolute;top:'+window.Lines[i].y+'px;left:'+
+                window.Lines[i].x+'px;');   
+        }
+        else
+        {
+            window.Lines[i].block.setAttribute('style','border:1px solid rgba(0, 0, 255, ' + 
+                (1 - Math.max(currenttime - window.Lines[i].startTime, 0)/fade) + ');width:'+window.Lines[i].width+
+                'px;height:0px;-moz-transform:rotate('+window.Lines[i].deg+'deg);-webkit-transform:rotate('+
+                window.Lines[i].deg+'deg);position:absolute;top:'+window.Lines[i].y+'px;left:'+
+                window.Lines[i].x+'px;');   
+        }
+        if(window.Lines[i].startTime + fade < currenttime)
+        {
+            window.Lines[i].deleteBlock();
+            window.Lines[i] = null;
+            window.Lines.splice(i, 1);
+            i--;
         }
     }
 }
@@ -186,12 +228,12 @@ function UpdateScoreboard()
     window.units1.innerHTML = "Units: " + window.baseOne.currentUnitCount + "/" + window.baseTwo.maxUnitCount;
     window.energy1.innerHTML = "Energy: " + Math.round(window.baseOne.energy);
     window.money1.innerHTML = "Money: " + Math.round(window.baseOne.money);
-    window.base1.innerHTML = "Base: " + window.baseOne.currentHealth + "/" + window.baseOne.maxHealth;
+    window.base1.innerHTML = "Base: " + Math.round(window.baseOne.currentHealth) + "/" + window.baseOne.maxHealth;
 
     window.units2.innerHTML = "Units: " + window.baseTwo.currentUnitCount + "/" + window.baseTwo.maxUnitCount;
     window.energy2.innerHTML = "Energy: " + Math.round(window.baseTwo.energy);
     window.money2.innerHTML = "Money: " + Math.round(window.baseTwo.money);
-    window.base2.innerHTML = "Base: " + window.baseTwo.currentHealth + "/" + window.baseTwo.maxHealth;
+    window.base2.innerHTML = "Base: " + Math.round(window.baseTwo.currentHealth) + "/" + window.baseTwo.maxHealth;
 
     currenttime = (new Date()).getTime() - window.StartTime;
     window.timer.innerHTML = Math.round(currenttime / (60 * 1000)) + ':' + pad(Math.round((currenttime / 1000) % 60), 2);
@@ -272,7 +314,7 @@ function Update()
     Cleanup();
     GenerateResources();
     UpdateScoreboard();
-    if((new Date()).getTime() - window.StartTime > 5 * 60 * 1000)
+    if((new Date()).getTime() - window.StartTime > 25 * 60 * 1000)
     {
         window.isAlive = false;
     }

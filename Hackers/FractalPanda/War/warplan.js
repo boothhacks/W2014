@@ -14,6 +14,7 @@ function Warplan(homebase, enemybase, startTime, resources)
     this.resources = new Array();
     this.energy = homebase.energy;
     this.money = homebase.money;
+    this.team = homebase.team;
     for(var i = 0; i < window.units.length; i++)
     {
         if(window.units[i].team == homebase.team)

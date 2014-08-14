@@ -3,8 +3,9 @@ UnitTypeEnum = {
     GUNNER : "Gunner",
     SNIPER : "Sniper",
     SCOUT : "Scout",
-    BOMBADIER : "Bombadier",
+    TANK : "TANK",
     GATLING : "Gatling",
+    SWARM : "Swarm",
     BASE: "base",
     WALL: "wall"
 }
@@ -14,16 +15,18 @@ MoneyCost = {
     "Gunner" : 60,
     "Sniper" : 100,
     "Scout" : 0,
-    "Bombadier" : 200,
+    "TANK" : 300,
     "Gatling" : 250,
+    "Swarm" : 10
 }
 EnergyCost = {
     "Brawler" : 45,
     "Gunner" : 10,
     "Sniper" : 30,
     "Scout" : 25,
-    "Bombadier" : 100,
+    "TANK" : 250,
     "Gatling" : 200,
+    "Swarm" : 55
 }
 
 ResourceType = {

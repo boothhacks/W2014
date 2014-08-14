@@ -17,20 +17,31 @@ function Unit(unitType, team, x, y)
     this.colorstring = "";
     switch (this.unitType)
     {
+        case UnitTypeEnum.SWARM:
+        //spawns multiple units
+            this.maxHealth = 3;
+            this.currentHealth = this.maxHealth;
+            this.speed = 4;
+            this.cooldown = 550;
+            this.range = 3;
+            this.attack = 2.7;
+            this.unitsize = 2.5;
+            this.colorstring = (40).toString(16)+(102).toString(16);
+            break;
         case UnitTypeEnum.BRAWLER:
             this.maxHealth = 105;
             this.currentHealth = this.maxHealth;
             this.speed = 3;
             this.cooldown = 700;
             this.range = 2;
-            this.attack = 4;
+            this.attack = 5;
             this.unitsize = 3;
             this.colorstring = (40).toString(16)+(102).toString(16);
             break;
         case UnitTypeEnum.SCOUT:
             this.maxHealth = 25;
             this.currentHealth = this.maxHealth;
-            this.speed = 4;
+            this.speed = 4.2;
             this.cooldown = 800;
             this.range = 2;
             this.attack = 1;
@@ -57,21 +68,21 @@ function Unit(unitType, team, x, y)
             this.unitsize = 1;
             this.colorstring = (140).toString(16)+(40).toString(16);
             break;
-        case UnitTypeEnum.BOMBADIER:
-            this.maxHealth = 400;
+        case UnitTypeEnum.TANK:
+            this.maxHealth = 300;
             this.currentHealth = this.maxHealth;
-            this.speed = 0.2;
+            this.speed = 0.3;
             this.cooldown = 4000;
             this.range = 100;
-            this.attack = 21;
-            this.unitsize = 5;
+            this.attack = 150;
+            this.unitsize = 6.5;
             this.colorstring = (140).toString(16)+(102).toString(16)
             this.AOE = true;
             break;
         case UnitTypeEnum.GATLING:
             this.maxHealth = 200;
             this.currentHealth = this.maxHealth;
-            this.speed = 0.5;
+            this.speed = 0.8;
             this.cooldown = 100;
             this.range = 75;
             this.attack = 3;
