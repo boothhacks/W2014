@@ -166,8 +166,8 @@ function Warrior1()
                     //If there's an enemy in range who's faster than me, ignore them
                     continue;
                 }
-                if(this.warplan.enemyUnits[j].unitType == UnitTypeEnum.SNIPER && 
-                    ((closestUnit && closestUnit.unitType != UnitTypeEnum.SNIPER) || !closestUnit))
+                if(this.warplan.enemyUnits[j].unitType == UnitTypeEnum.SNIPER &&
+                    (!closestUnit || closestUnit.unitType != UnitTypeEnum.SNIPER))
                 {
                    //if the enemy I'm looking at is a sniper and 
                    //(I'm not targeting anyone or I'm targeting a non-sniper)
@@ -175,7 +175,9 @@ function Warrior1()
                    closestUnit = this.warplan.enemyUnits[j];
                    closestDistance = distance; 
                 }
-                else if(distance < closestDistance && ((closestUnit && closestUnit.unitType != UnitTypeEnum.SNIPER) || !closestUnit))
+                else if(distance < closestDistance && 
+                    (!closestUnit || closestUnit.unitType != UnitTypeEnum.SNIPER) || 
+                     this.warplan.enemyUnits[j].unitType == UnitTypeEnum.SNIPER)
                 {
                     //TODO: differntiate between destination target and attack target.  Should at least attack somebody if they're next to me!
 
@@ -190,7 +192,7 @@ function Warrior1()
             }
             if(this.myUnitCounts[UnitTypeEnum.SWARM] < (this.enemyUnitCounts[UnitTypeEnum.SNIPER] * 2 + this.enemyUnitCounts[UnitTypeEnum.SNIPER] * 2 ))
             {
-                this.swarmAttacking == false;
+                this.swarmAttacking = false;
             }
             //batch my Swarm waves
             //don't swarm if there's a gatling, or you'll get slaughtered
